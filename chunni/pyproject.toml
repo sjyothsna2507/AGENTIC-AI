@@ -1,0 +1,25 @@
+[project]
+name = "chunni"
+version = "0.1.0"
+description = "chunni using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.114.0,<1.0.0",
+    "google-generativeai>=0.8.5",
+    "groq>=0.22.0",
+]
+
+[project.scripts]
+chunni = "chunni.main:run"
+run_crew = "chunni.main:run"
+train = "chunni.main:train"
+replay = "chunni.main:replay"
+test = "chunni.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

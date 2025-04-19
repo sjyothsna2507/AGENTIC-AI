@@ -1,0 +1,22 @@
+```json
+[
+  {
+    "job_id": "12345",
+    "resume_used": "tailored_resume_12345.txt",
+    "application_status": "Submitted",
+    "submission_timestamp": "2024-11-05T18:59:43.123456"
+  },
+  {
+    "job_id": "67890",
+    "resume_used": "tailored_resume_67890.txt",
+    "application_status": "Submitted",
+    "submission_timestamp": "2024-11-05T18:59:43.789012"
+  },
+  {
+    "job_id": "13579",
+    "resume_used": "tailored_resume_13579.txt",
+    "application_status": "Submitted",
+    "submission_timestamp": "2024-11-05T18:59:44.456789"
+  }
+]
+```

@@ -1,0 +1,82 @@
+job_sourcing_task:
+  description: >
+    Continuously collect and normalize job listings based on the following criteria:
+    
+    - Job Title: {job_title}
+    - Location: {location}
+    - Skills: {skills}
+    - Experience Level: {experience_level}
+    - Job Type: {job_type}
+
+    Source job data from multiple platforms, including LinkedIn API, Indeed RSS feeds, Naukari website and corporate career pages. 
+    Each listing should be normalized into a consistent JSON format with the fields: 
+    - job_id
+    - title
+    - company
+    - skills[]
+    - description
+    - url
+
+    Ensure listings match the criteria provided and remove duplicates or irrelevant entries.
+
+    This task forms the foundation of the ApplySmart system by delivering clean, structured, and relevant job listings for downstream processing.
+
+  expected_output: >
+    A list of job postings (max 5 per batch) published to the `jobs.new` topic, 
+    with each posting structured in a JSON format including: job_id, title, company, skills[], description, and url. 
+    All listings must be relevant to the given title, location, skills, experience level, and job type.
+
+  agent: job_sourcing_agent
+
+
+fit_and_advice_task:
+  description: >
+    **Task**: Match Jobs to User Profile and Generate Career Advice
+
+    **Description**: 
+    For every new job posted to `jobs.new`, perform the following steps:
+    1. Compute cosine similarity between the job description and the user profile embedding.
+    2. Assign a fit score and categorize jobs as either:
+        - "Apply Now"
+        - "Upskill First"
+    3. Generate tailored career advice based on the category:
+        - For "Apply Now": suggest 2–3 tweaks to resume keywords or phrasing.
+        - For "Upskill First": recommend relevant micro-courses or mini-projects to close skill gaps.
+
+    **Parameters**:
+    - user_profile_embedding: The user's precomputed vector embedding of skills and experience.
+
+    **Note**:
+    Outstanding work on this task could directly help someone land their dream job—bring your A-game!
+    Your suggestions directly impact job success—be precise and thoughtful!
+  expected_output: >
+    A list of job fit assessments published to `jobs.advised` with fit_score, label, and advice.
+  agent: fit_and_advice_agent
+
+
+application_concierge_task:
+  description: >
+    **Task**: Automate Resume Tailoring and Application Submission
+
+    **Description**: 
+    For each job labeled "Apply Now" from `jobs.advised`, perform the following:
+    1. Apply suggested resume tweaks to the master template (insert keywords, reword bullet points).
+    2. Automate job application via form-filling (e.g., using a headless browser or API).
+    3. Track application outcome by polling job status or accepting user feedback (e.g., received, in review, interview).
+
+    Log the following to `applications.status`:
+    - job_id
+    - resume used
+    - application status
+    - submission timestamp
+
+    **Parameters**:
+    - master_resume_template: Base resume that should be tailored per job listing.
+
+    **Note**:
+    Outstanding work on this task could directly help someone land their dream job—bring your A-game!
+    Your work helps users apply quickly and accurately—make it seamless!
+  expected_output: >
+    Applications submitted with resume edits logged and status updates pushed to `applications.status`.
+  agent: application_concierge_agent
+  output_file: applications_status.json
